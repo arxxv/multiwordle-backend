@@ -1,4 +1,3 @@
-const { connect } = require("mongoose");
 const Redis = require("redis");
 require("dotenv").config();
 const url = process.env.REDISURL;

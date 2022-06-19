@@ -1,7 +1,5 @@
 const { commonWords, validWords } = require("./words");
 
-console.log(commonWords.slice(10, 11));
-
 const randomWord = () => {
   return commonWords[Math.round(Math.random() * commonWords.length)];
 };
@@ -23,6 +21,7 @@ const newGame = () => {
     // hardMode: false,
     letterCount,
     addPoints: 0,
+    points: 0,
   };
   return state;
 };
@@ -72,6 +71,7 @@ const updateGame = (state, guess) => {
   else if (state.rowIndex === 5) state.gameStatus = "LOST";
   const addPoints = getPoints(guess, state);
   state.addPoints = addPoints;
+  state.points += addPoints;
   state.rowIndex += 1;
   return state;
 };

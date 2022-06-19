@@ -5,7 +5,6 @@ const { newGuess, newGame, updateGame } = require("./utils/game");
 const { makeid } = require("./utils/utils");
 const { getCache, setCache, delCache } = require("./db/redis");
 require("dotenv").config();
-console.log(process.env.REDIS_URI);
 const app = express();
 const server = http.createServer(app);
 

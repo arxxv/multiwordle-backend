@@ -1,6 +1,6 @@
 const Redis = require("redis");
 require("dotenv").config();
-const url = process.env.REDISURL;
+const url = process.env.REDIS_URI;
 const redisClient = Redis.createClient({ url });
 const EXP_TIME = 3600;
 

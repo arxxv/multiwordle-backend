@@ -22,6 +22,7 @@ const newGame = () => {
     letterCount,
     addPoints: 0,
     points: 0,
+    usedKeys: new Array(26).fill(""),
   };
   return state;
 };
@@ -62,6 +63,20 @@ const checkLetters = (guess, state) => {
   return guessArr;
 };
 
+const updateKeyboard = (usedKeys, guess, solution) => {
+  let tempKeys = usedKeys;
+  for (let i = 0; i < 5; i++) {
+    let x = guess[i];
+    if (solution.includes(x)) {
+      if (tempKeys[x.charCodeAt(0) - "a".charCodeAt(0)] === "correct") continue;
+      tempKeys[x.charCodeAt(0) - "a".charCodeAt(0)] = "present";
+      if (solution[i] === x)
+        tempKeys[x.charCodeAt(0) - "a".charCodeAt(0)] = "correct";
+    } else tempKeys[x.charCodeAt(0) - "a".charCodeAt(0)] = "absent";
+  }
+  return tempKeys;
+};
+
 const updateGame = (state, guess) => {
   guess = guess.toLowerCase();
   state.boardState[state.rowIndex] = guess;
@@ -72,6 +87,7 @@ const updateGame = (state, guess) => {
   const addPoints = getPoints(guess, state);
   state.addPoints = addPoints;
   state.points += addPoints;
+  state.usedKeys = updateKeyboard(state.usedKeys, guess, state.solution);
   state.rowIndex += 1;
   return state;
 };

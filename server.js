@@ -51,8 +51,8 @@ io.on("connection", (socket) => {
       return;
     }
 
-    const searchgame = "mw-g-" + roomId;
-    let gamestateexists = await getCache(searchgame);
+    const searchgameid = "mw-g-" + roomId;
+    let gamestateexists = await getCache(searchgameid);
     if (gamestateexists) {
       if (
         Object.keys(gamestateexists).length === 1 &&
@@ -60,19 +60,31 @@ io.on("connection", (socket) => {
       ) {
         return;
       } else if (userid in gamestateexists) {
-        socket.emit("startGame", gamestateexists[userid]);
+        // socket.emit("startGame", gamestateexists[userid]);
+        socket.join(roomId);
         let otherPlayerState;
         for (let uid of Object.keys(gamestateexists)) {
           if (uid != userid) {
             otherPlayerState = gamestateexists[uid];
           }
         }
-        if (otherPlayerState) {
-          socket.emit("otherPlayerMove", {
+
+        let data = {
+          me: gamestateexists[userid],
+          op: {
             evaluations: otherPlayerState.evaluations,
-            addPoints: otherPlayerState.points,
-          });
-        }
+            points: otherPlayerState.points,
+          },
+        };
+        socket.emit("startGame", data);
+
+        // if (otherPlayerState) {
+        //   // console.log(otherPlayerState.evaluations);
+        //   socket.emit("otherPlayerMove", {
+        //     evaluations: otherPlayerState.evaluations,
+        //     addPoints: otherPlayerState.points,
+        //   });
+        // }
         return;
       }
     }
